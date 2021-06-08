@@ -1,0 +1,90 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>| @ViewData["Title"]</title>
+    <link rel="icon" href="https://img.icons8.com/emoji/48/000000/satellite-emji.png" type="image/icon type">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap" rel="stylesheet">
+
+    <!-- CSS Library -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/Body_Background.css" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <!-- STICKY NAVBAR -->
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top px-0">
+        <div class="container justify-content-center">
+            <img id="navbarLogo" src="https://img.icons8.com/emoji/48/000000/satellite-emji.png" alt="Satellite Logo" />
+
+
+            <p> <a id="navbar-site-adı" class="btn" asp-controller="Ziyaretci" asp-action="Anasayfa">SATELLITE</a></p>
+
+            <a id="btnKayıt" class="btn btn-warning ml-4 mb-3" data-toggle="modal" data-target="#kayitEkranı">Hemen Katıl!</a>
+
+
+            <ul id="navbarİçi" class="nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link style1" data-toggle="modal" data-target="#hakkimizdaModal">Hikayemiz</a>
+
+                </li>
+                <li class="nav-item">
+                    <span id="SendeYaz" class="badge badge-pill badge-danger" data-toggle="modal" data-target="#kayitEkranı">Sen de Yaz!</span>
+                </li>
+                <li class="nav-item mt-1 ml-3">
+                    <div class="dropdown">
+                        <span class="dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Giriş
+                        </span>
+                        <div class="dropdown-menu justify-content-center" width="150px">
+                            <form class=" px-2 py-2" asp-controller="User" asp-action="GirisYap" method="post">
+                                <div class="form-group">
+                                    <label name="Email" class="control-label">E-Mail Adresi</label>
+                                    <input name="Email" type="email" class="form-control" size="100" />
+                                    <span name="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                                        <label class="form-check-label" for="dropdownCheck">
+                                            Beni Hatırla
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary text-center">Giriş Yap</button>
+                                </div>
+
+                            </form>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item giriş-formu-yazıları" data-toggle="modal" data-target="#kayitEkranı" href="#">Hemen Kaydol!</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- STICKY NAVBAR BİTİŞİ -->
+    <partial name="_KayıtEkranıPartial" />
+    <partial name="_HakkımızdaPartial" />
+
+    @RenderBody()
+
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
+    <script src="~/js/site.js"></script>
+    @RenderSection("Scripts", required: false)
+
+
+</body>
+</html>

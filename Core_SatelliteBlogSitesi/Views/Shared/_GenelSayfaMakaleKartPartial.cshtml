@@ -1,0 +1,202 @@
+﻿@model Tuple<List<Article>, List<ArticleCategory>, List<Category>, List<UserCategory>, List<User>>;
+
+@{
+    List<Article> articles = Model.Item1.OrderByDescending(x => x.ReleaseDate).ToList();
+    List<User> users = Model.Item5;
+    ViewData["userid"] = ViewBag.id;
+
+    string[] classNames = { "fade-up", "fade-down", "fade-right", "fade-left", "fade-up-right", "fade-up-left", "fade-down-right", "zoom-out-down", "zoom-out-right", "zoom-out-left" };
+}
+
+
+@{
+    if (ViewData["userid"] != null)
+    {
+        int id = Convert.ToInt32(ViewData["userid"]);
+
+        List<int> kisininTakipEttikleri = Model.Item4.Where(x => x.UserID == id).Select(z => z.CategoryID).ToList();
+
+        if (kisininTakipEttikleri.Count == 0)
+        {
+            @for (int i = 0; i < articles.Count; i++)
+            {
+                System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
+
+                string icerik = rx.Replace(articles[i].Content, "");
+                icerik = icerik.Replace("&nbsp;", " ");
+                string[] cumleler = icerik.Split('.');
+                string content = string.Empty;
+                for (int j = 0; j < 3; j++)
+                    content += cumleler[j] + ". ";
+
+                User user = users.AsQueryable().Where(x => x.UserID == articles[i].UserID).FirstOrDefault();
+
+                @*<div class="container"> // Hareketli kart yapısı için sadece bu alanları açmak yeterli.
+                    <div class="inner">*@
+                <div data-aos="@classNames[i]">
+                    <div class="makale-kart-yapısı">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-2 mt-1 mb-3 my-2">
+                                    <a asp-controller="user" asp-action="Profil" asp-route-kullanıcıadı="@user.UserName"><img id="avatar" src="/postedImage/@user.Avatar" alt="@user.FirstName resmi" /></a>
+                                </div>
+                                <div class="col-md-9 ml-2">
+                                    <p>
+                                        <a asp-controller="user" asp-action="Profil" asp-route-kullanıcıadı="@user.UserName" class="text-light font-weight-bold"><h3>@user.FirstName @user.LastName</h3></a>
+                                    </p>
+                                    <p>
+                                        <h4 class="text-light font-weight-bold">@articles[i].ReleaseDate.ToString("MMM dd"), @articles[i].ReleaseDate.Year - ~@articles[i].ReadTime Dk</h4>
+                                    </p>
+                                </div>
+                                <div id="makale-alt-kart" class="col-md-12 justify-content-center pb-2">
+                                    <div class="card" style="border:none !important;">
+
+                                        <img src="/postedImage/@articles[i].ArticleImage" class="card-img-top" alt="@articles[i].Head Resmi" style="width:100%; border:4px solid white;">
+                                        <div class="card-body">
+                                            <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@articles[i].ArticleID" asp-route-makaleAdı="@articles[i].Head.Trim().Replace(' ','?')" class="card-title text-dark anasayfa-makale-ismi">
+                                                <h3 class="card-title">@articles[i].Head</h3>
+                                            </a>
+                                            <p>
+                                                @content
+                                            </p>
+                                            <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@articles[i].ArticleID" asp-route-makaleAdı="@articles[i].Head.Trim().Replace(' ','?')" class="btn btn-primary">Devamını Oku...</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*</div>
+                    </div>*@
+            }
+        }
+
+        else
+        {
+            foreach (int konuID in kisininTakipEttikleri)
+            {
+                List<int> konuMakaleleri = Model.Item2.Where(x => x.CategoryID == konuID).Select(x => x.ArticleID).ToList();
+
+                foreach (int makaleid in konuMakaleleri)
+                {
+                    Article article = articles.AsQueryable().Where(x => x.ArticleID == makaleid).FirstOrDefault();
+
+                    System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
+
+                    string icerik = rx.Replace(article.Content, "");
+                    icerik = icerik.Replace("&nbsp;", " ");
+                    string[] cumleler = icerik.Split('.');
+                    string content = string.Empty;
+                    for (int j = 0; j < 3; j++)
+                        content += cumleler[j] + ". ";
+
+                    User user = users.AsQueryable().Where(x => x.UserID == article.UserID).FirstOrDefault();
+
+                    Random rd = new Random();
+                    int rand_num = rd.Next(1, classNames.Length);
+
+                    @*<div class="container"> // Hareketli kart yapısı için sadece bu alanları açmak yeterli.
+                        <div class="inner">*@
+                    <div data-aos="@classNames[rand_num]">
+                        <div class="makale-kart-yapısı">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-2 mt-1 mb-3 my-2">
+                                        <a asp-controller="user" asp-action="Profil" asp-route-kullanıcıadı="@user.UserName"><img id="avatar" src="/postedImage/@user.Avatar" alt="@user.FirstName resmi" /></a>
+                                    </div>
+                                    <div class="col-md-9 ml-2">
+                                        <p>
+                                            <a asp-controller="user" asp-action="Profil" asp-route-kullanıcıadı="@user.UserName" class="text-light font-weight-bold"><h3>@user.FirstName @user.LastName</h3></a>
+                                        </p>
+                                        <p>
+                                            <h4 class="text-light font-weight-bold">@article.ReleaseDate.ToString("MMM dd"), @article.ReleaseDate.Year - ~@article.ReadTime Dk</h4>
+                                        </p>
+                                    </div>
+                                    <div id="makale-alt-kart" class="col-md-12 justify-content-center pb-2">
+                                        <div class="card" style="border:none !important;">
+
+                                            <img src="/postedImage/@article.ArticleImage" class="card-img-top" alt="@article.Head Resmi" style="width:100%; border:4px solid white;">
+                                            <div class="card-body">
+                                                <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@article.ArticleID" asp-route-makaleAdı="@article.Head.Trim().Replace(' ','?')" class="card-title text-dark anasayfa-makale-ismi">
+                                                    <h3 class="card-title">@article.Head</h3>
+                                                </a>
+                                                <p>
+                                                    @content
+                                                </p>
+                                                <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@article.ArticleID" asp-route-makaleAdı="@article.Head.Trim().Replace(' ','?')" class="btn btn-primary">Devamını Oku...</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*</div>
+                        </div>*@
+                }
+            }
+        }
+    }
+
+    else
+    {
+        for (int i = 0; i < articles.Count; i++)
+        {
+            System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
+
+            string icerik = rx.Replace(articles[i].Content, "");
+            icerik = icerik.Replace("&nbsp;", " ");
+            string[] cumleler = icerik.Split('.');
+            string content = string.Empty;
+            for (int j = 0; j < 3; j++)
+                content += cumleler[j] + ". ";
+
+            User user = users.AsQueryable().Where(x => x.UserID == articles[i].UserID).FirstOrDefault();
+
+            @*<div class="container"> // Hareketli kart yapısı için sadece bu alanları açmak yeterli.
+                <div class="inner">*@
+            <div data-aos="@classNames[i]">
+                <div class="makale-kart-yapısı">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2 mt-1 mb-3 my-2">
+                                <a asp-controller="user" asp-action="Profil" asp-route-kullanıcıadı="@user.UserName"><img id="avatar" src="/postedImage/@user.Avatar" alt="@user.FirstName resmi" /></a>
+                            </div>
+                            <div class="col-md-9 ml-2">
+                                <p>
+                                    <a asp-controller="user" asp-action="Profil" asp-route-kullanıcıadı="@user.UserName" class="text-light font-weight-bold"><h3>@user.FirstName @user.LastName</h3></a>
+                                </p>
+                                <p>
+                                    <h4 class="text-light font-weight-bold">@articles[i].ReleaseDate.ToString("MMM dd"), @articles[i].ReleaseDate.Year - ~@articles[i].ReadTime Dk</h4>
+                                </p>
+                            </div>
+                            <div id="makale-alt-kart" class="col-md-12 justify-content-center pb-2">
+                                <div class="card" style="border:none !important;">
+
+                                    <img src="/postedImage/@articles[i].ArticleImage" class="card-img-top" alt="@articles[i].Head Resmi" style="width:100%; border:4px solid white;">
+                                    <div class="card-body">
+                                        <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@articles[i].ArticleID" asp-route-makaleAdı="@articles[i].Head.Trim().Replace(' ','?')" class="card-title text-dark anasayfa-makale-ismi">
+                                            <h3 class="card-title">@articles[i].Head</h3>
+                                        </a>
+                                        <p>
+                                            @content
+                                        </p>
+                                        <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@articles[i].ArticleID" asp-route-makaleAdı="@articles[i].Head.Trim().Replace(' ','?')" class="btn btn-primary">Devamını Oku...</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*</div>
+                </div>*@
+        }
+    }
+}
+
+

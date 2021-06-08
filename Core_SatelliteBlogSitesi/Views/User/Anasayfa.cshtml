@@ -1,0 +1,41 @@
+﻿@model Tuple<List<Article>, List<ArticleCategory>, List<Category>, List<UserCategory>, List<User>>;
+
+@{
+    List<Article> articles = Model.Item1;
+    List<User> users = Model.Item5;
+}
+
+@{
+    ViewData["Title"] = "AnaSayfa";
+    ViewData["id"] = ViewBag.id;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars3"></div>
+
+
+<!-- CAROUSEL -->
+
+<partial name="_AnaSayfaSlayt" />
+
+<div id="populer-makaleler">
+    <partial name="_PopulerOnMakalePartial" />
+</div>
+
+<div id="cardlar-ve-sag-alan" class="container-fluid mx-0">
+    <div class="row">
+
+        <div id="anasayfa-makale-genel-alanı" class="col-md-4">
+            <partial name="_GenelSayfaMakaleKartPartial" />
+            <partial name="_TümKonularModal" />
+        </div>
+
+        <div class="col-md-3 ml-5">
+            <partial name="_GenelSayfaSagAlanPartial" />
+        </div>
+
+    </div>
+</div>

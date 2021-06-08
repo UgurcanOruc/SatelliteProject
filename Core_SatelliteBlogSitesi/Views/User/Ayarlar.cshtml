@@ -1,0 +1,100 @@
+﻿@model Tuple<List<Article>, List<ArticleCategory>, List<Category>, List<UserCategory>, List<User>>;
+
+@{     
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewData["Title"] = "Ayarlar";
+    
+    ViewData["id"] = ViewBag.id;
+    
+    User user = Model.Item5.AsQueryable().Where(x => x.UserID == Convert.ToInt32(ViewData["id"])).FirstOrDefault();
+    
+    string url = "www.satelliteblog.com/@" + user.UserName;
+}
+
+<section class="wrapper">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+</section>
+
+
+<div id="ayarlar" class="container mb-4">
+    <div class="row">
+        <div class="col-md-4 offset-1 mt-2">
+
+            <div class="col-md-12">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
+                    <h1 style="color:white"> Ayarlar</h1>
+                </svg>
+            </div>
+
+            <form class="mt-3" asp-action="Ayarlar" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="control-label">İsim</label>
+                    <input name="isim" class="form-control" value="@user.FirstName" maxlength="20"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Soyisim</label>
+                    <input name="soyisim" class="form-control" value="@user.LastName" maxlength="20"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">E-Mail</label>
+                    <input class="form-control" placeholder="@user.Email" disabled />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Kullanıcı Adı</label>
+                    <input name="kullanıcıAdı" class="form-control" value="@user.UserName" maxlength="10"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Biogrofi</label>
+                    <textarea name="bio" class="form-control" maxlength="255">@user.Bio</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">URL</label>
+                    <input class="form-control" value="@url" disabled />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Avatar</label>
+                    <input type="file" name="avatar" class="form-control" value="@user.Avatar" />
+                </div>
+                <div class="form-group">
+                    <input type="button" value="Değişiklikleri Kaydet" class="btn btn-success" data-toggle="modal" data-target="#değişiklikleriKaydet" />
+
+                    <div class="modal fade" id="değişiklikleriKaydet" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body text-center font-weight-bold">
+                                    Yapılan Değişiklikleri Kaydetmek İstiyor Musunuz?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger font-weight-bold" data-dismiss="modal">Kapat</button>
+                                    <button type="submit" class="btn btn-success font-weight-bold">Değişiklikleri Kaydet!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <a id="btnSil" class="btn btn-danger font-weight-bold" data-toggle="modal" data-target="#hesabıSil">Hesabı Sil</a>
+
+            <div class="modal fade" id="hesabıSil" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body text-center font-weight-bold">
+                            Hesabınızı Silmek İstiyor Musunuz?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success font-weight-bold" data-dismiss="modal">Kapat</button>
+                            <a class="btn btn-danger font-weight-bold" asp-action="Hesabısil">Hesabı Sil</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

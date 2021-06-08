@@ -1,0 +1,116 @@
+﻿@model Tuple<List<Article>, List<ArticleCategory>, List<Category>, List<UserCategory>, List<User>>;
+
+@{
+    ViewData["userid"] = ViewBag.id;
+    User user = Model.Item5.Where(x => x.UserID == Convert.ToInt32(ViewData["userid"])).FirstOrDefault();
+    List<UserCategory> takipettikleri = Model.Item4.Where(x => x.UserID == user.UserID).ToList();
+}
+
+
+<div class="modal fade" id="KategorilerModal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div  class="modal-dialog modal-dialog-centered" role="document">
+
+        <div id="Kategoriler-acılır-ekranı" class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h1 style="color:white">
+                    Tüm Kategoriler
+                </h1>
+                <button type="button" class="close btn-danger kapatma-butonu" style="color:red" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body text-justify">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="text-light font-weight-bold">Takip Ettiğiniz Konular</h4>
+                        </div>
+                        <div class="col-md-12">
+                            @{
+                                if (takipettikleri.Count == 0)
+                                {
+                                    <h6 class="text-light font-weight-bold">
+                                        Hiç Takip Ettiğin Bir Konu Yok Mu? :((
+                                    </h6>
+                                }
+                                else
+                                {
+                                    foreach (UserCategory item in takipettikleri)
+                                    {
+                                        <div style="float:left;">
+                                            
+                                            <a asp-controller="UserCategory"
+                                               asp-action="KonuTakiptenÇıkar"
+                                               asp-route-konuid="@item.CategoryID"
+                                               class="ml-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="red" class="bi bi-dash-circle font-weight-bold" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
+                                                </svg>
+                                            </a>
+                                            
+                                            <a asp-controller="Makale"
+                                               asp-action="KonularaGöreMakale"
+                                               asp-route-id="@item.CategoryID"
+                                               class="btn btn-warning mr-1 my-2"
+                                               style="line-height:8px;">
+
+                                                <strong>
+                                                    @Model.Item3.Where(x => x.CategoryID == item.CategoryID).Select(x => x.Name).FirstOrDefault()
+                                                </strong>
+
+                                            </a>
+
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="text-light font-weight-bold">Diğer Konular</h4>
+                        </div>
+
+                        <div class="col-md-12">
+                            @foreach (Category item in Model.Item3)
+                            {
+                                if (!takipettikleri.AsQueryable().Select(x => x.CategoryID).ToList().Contains(item.CategoryID))
+                                {
+                                    <div style="float:left;">
+                                        <a asp-controller="UserCategory"
+                                           asp-action="KonuTakipEt"
+                                           asp-route-konuid="@item.CategoryID"
+                                           class="ml-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-plus-circle font-weight-bold" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                            </svg>
+                                        </a>
+
+                                        <a asp-controller="Makale"
+                                           asp-action="KonularaGöreMakale"
+                                           asp-route-id="@item.CategoryID"
+                                           class="btn btn-warning mr-1 my-2"
+                                           style="line-height:8px;">
+
+                                            <strong>
+                                                @item.Name
+                                            </strong>
+
+                                        </a>
+
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

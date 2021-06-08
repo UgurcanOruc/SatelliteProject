@@ -1,0 +1,381 @@
+﻿
+body {
+    background: radial-gradient(ellipse at bottom, #335066 25%, #090a0f 75%);
+    right: 0;
+    position: absolute;
+    width: 100vw;
+}
+
+
+
+/*-----ZİYARETÇİ NAVBAR CSS---------*/
+#navbar {
+    background: linear-gradient(#000000, #19222E);
+    font-weight: bold !important;
+    font-size: 20px;
+    font-family: Bahnschrift;
+    z-index: 99999 !important;
+}
+
+.style1 {
+    color: white !important;
+    font-weight: bold !important;
+    text-align: right !important;
+    cursor:pointer !important;
+}
+
+#navbarLogo {
+    width: 50px;
+    height: auto;
+}
+
+#navbar-site-adı {
+    color: white;
+    font-family: 'East Sea Dokdo', cursive;
+    font-size: 60px;
+}
+
+#btnKayıt {
+    height: 40px;
+    width: 140px;
+    border-radius: 25px 25px 25px 25px;
+    font-family: Bahnschrift;
+    font-weight: bold !important;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+    #btnKayıt:hover {
+        transform: scale(1.2) perspective(100px);
+    }
+
+
+.dropdown-menu {
+    margin-left: -50%;
+}
+
+#SendeYaz {
+    font-size: 15px !important;
+    margin-top: 10% !important;
+    cursor: pointer;
+}
+
+    #SendeYaz:hover {
+        transform: scale(1.2) perspective(100px);
+    }
+
+#navbarListe {
+    margin-right: 10% !important;
+}
+
+#dropdownMenu2 {
+    color: white !important;
+    cursor: pointer;
+}
+
+.giriş-formu-yazıları {
+    color: black !important;
+}
+#hakkımızdaAlanı {
+    background: linear-gradient(#000000, #11C2CF) !important;
+    color:white;
+}
+
+.kapatma-butonu{
+    color:red;
+}
+
+.kapatma-butonu:hover {
+    color: white!important;
+}
+
+#kayitAlani {
+    background: linear-gradient(#000000, #11C2CF) !important;
+    color: white;
+    /*font-weight: bold;*/
+}
+
+#kayit-ekrani-kaydol-butonu{
+    font-size:30px!important;
+    font-weight:bold!important;
+}
+/*#hakkımızda {
+background-color: red;
+background-image: linear-gradient(45deg, #f3ec78, #af4261);
+background-image: linear-gradient(white, #000000);
+background-size: 100%;
+    background-repeat: repeat;
+-webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+     -moz-text-fill-color: transparent;
+}*/
+/*----ZİYARETÇİ NAVBAR CSS---------*/
+
+
+
+
+
+/*------- ÜYE NAVBAR CSS----------*/
+#yeni-makale-üye {
+    font-size: 15px !important;
+    cursor: pointer;
+}
+
+    #yeni-makale-üye:hover {
+        transform: scale(1.2) perspective(100px);
+    }
+
+#kullanıcı-dropdown svg {
+    height:25px;
+    width:25px;
+}
+
+#üye-navbar-hakkımızda{
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:20px;
+    font-family:Bahnschrift;
+}
+/*------- ÜYE NAVBAR CSS----------*/
+
+
+
+
+/*--------- ANASAYFA --------------*/
+
+
+/*--------- Slayt Yapsı----------*/
+#Anasayfa-Slayt {
+    background-color: #19222E !important;
+}
+
+    #Anasayfa-Slayt img {
+       height:600px!important;
+    }
+/*--------- Slayt Yapsı Bitişi----------*/
+
+
+/*-------- Popüler Makaleler----------*/
+#populer-makaleler {
+    background-color: #f7f3e9;
+}
+/*-------- Popüler Makaleler Bitişi----------*/
+
+
+#cardlar-ve-sag-alan {
+    margin-top: 25px;
+    margin-left: 4.3%;
+    z-index: -1;
+}
+
+
+
+/*--------- Makale Kart Yapısı-------------*/
+
+
+#anasayfa-makale-genel-alanı {
+    margin-left:370px;
+}
+
+#container {
+    perspective: 40px;
+}
+
+.makale-kart-yapısı {
+    background-color: none;
+    margin-bottom: 25px;
+    border-radius: 10px;
+}
+
+#inner {
+    transition: transform 0.5s;
+    -webkit-transition: transform 0.5s;
+    box-shadow: 2px 2px 50px rgba(0, 0, 0, 0.2);
+}
+
+#avatar {
+    height: 100px;
+    width: 100px;
+    border: 4px solid #dddddd;
+    border-radius: 50px 50px 50px 50px;
+}
+
+#makale-alt-kart {
+    width: 38rem;
+}
+
+.article-context {
+    text-align: justify;
+}
+
+.anasayfa-makale-ismi:hover {
+    transform: scale(1.2) perspective(100px);
+}
+    
+/*--------- Makale Kart Yapısı Bitişi-------------*/
+
+
+
+/*----------- Konular-Yazarlar-Footer------*/
+#anasayfa-sag-alan {
+    top: 150px;
+}
+
+#konular {
+    background: linear-gradient(#FFCCFF,#CC99FF);
+    border-radius: 10px;
+    box-shadow: 10px 10px;
+}
+
+#konular table {
+    font-size:13px;
+    font-weight: bold;
+}
+
+#Kategoriler-acılır-ekranı{
+    background: linear-gradient(#000000, #11C2CF) !important;
+}
+
+#yazarlar {
+    background: linear-gradient(#CC99FF,#99CCFF);
+    border-radius: 10px;
+    box-shadow: 10px 10px;
+}
+
+    #yazarlar table {
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    #footer {
+        background: linear-gradient(#99CCFF,#006666);
+        border-radius: 10px;
+        box-shadow: 10px 10px;
+    }
+
+.footer-yazısı {
+    color: white;
+}
+
+
+
+.back-to-top {
+    display: none;
+}
+
+#footer svg {
+    width:40px;
+}
+
+    #footer svg:hover {
+        fill: white;
+        transform: scale(1.3);
+        transition: transform 0.5s;
+    }
+
+
+/*----------- Konular-Yazarlar-Footer Bitişi------*/
+
+
+
+/*--------- ANASAYFA BİTİŞİ --------------*/
+
+
+
+/*------------ AYARLAR SAYFASI ----------------*/
+#ayarlar label {
+    color: white;
+    font-weight: bold;
+}
+
+#ayarlar svg {
+    width:50px;
+    height:50px; 
+    float:left;
+    margin-left:5px;
+    fill:white;
+}
+#ayarlar svg:hover {
+    fill:#99CCFF;
+}
+/*------------ AYARLAR SAYFASI BİTİŞİ ----------------*/
+
+/*---------------- MAKALE AYRINTI SAYFASI -------------*/
+#makaleayrıntısayfası {
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: Bahnschrift;
+}
+
+#makale-tumbnail {
+    width:800px;
+    border:8px solid white;
+}
+
+#yazar-resmi {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px 25px 25px 25px;
+}
+
+    #yazar-resmi:hover {
+        transform: scale(1.3);
+        transition: transform 0.5s;
+    }
+
+
+/*---------------- MAKALE AYRINTI SAYFASI BİTİŞİ-------------*/
+
+
+
+
+
+
+/*------------------- PROFİL SAYFASI ----------------*/
+#profil-sayfası-kullanıcı {
+    top: 160px;
+}
+
+#profil-sayfası-avatar {
+    width: 250px;
+    border: 8px solid white;
+}
+
+#profil-yazıları {
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    font-family:Bahnschrift;
+}
+
+#makale-edit-ve-silme a{
+    color:black!important;
+}
+
+#makale-edit-ve-silme svg {
+    height: 25px;
+    width: 25px;
+}
+
+    #makale-edit-ve-silme svg:hover {
+        fill: red;
+        transform: scale(1.3);
+        transition: transform 0.5s;
+    }
+
+/*---------------- PROFİL SAYFASI BİTİŞİ-------------*/
+
+
+
+
+/*-------------------- YENİ MAKALE SAYFASI ----------------*/
+#makale-yazma-alanı label {
+    color: white;
+    font-weight: bold;
+    font-family: Bahnschrift;
+    font-size: 25px;
+}
+/*----------------- YENİ MAKALE SAYFASI BİTİŞİ -------------*/

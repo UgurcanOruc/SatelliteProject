@@ -1,0 +1,162 @@
+﻿@model Tuple<List<Article>, List<ArticleCategory>, List<Category>, List<UserCategory>, List<User>>;
+
+@{
+    string isim = ViewBag.kullanıcıadı;
+
+    int id = Convert.ToInt32(ViewBag.id);
+
+    User user = Model.Item5.AsQueryable().Where(x => x.UserName == isim).FirstOrDefault();
+    List<Article> kisiMakaleleri = Model.Item1.AsQueryable().OrderByDescending(x => x.ReleaseDate).Where(x => x.UserID == user.UserID).ToList();
+
+    if (ViewBag.id == null)
+    {
+        ViewData["Title"] = user.FirstName + " " + user.LastName;
+    }
+    if (ViewBag.id != null)
+    {
+        Layout = "~/Views/Shared/_UserLayout.cshtml";
+        ViewData["Title"] = user.FirstName + " " + user.LastName;
+        ViewData["id"] = ViewBag.id;
+    }
+}
+
+
+<section class="wrapper">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+</section>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 ">
+            <div id="profil-sayfası-kullanıcı" class="sticky-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <div class="col-md-12 text-center">
+                                    @{
+                                        if (!String.IsNullOrWhiteSpace(user.Avatar))
+                                        {
+                                            <img id="profil-sayfası-avatar" src="/postedImage/@user.Avatar" alt="@user.FirstName Resmi" />
+                                        }
+                                        else
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="white" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                            </svg>
+                                        }
+                                    }
+
+                                </div>
+                                <div id="profil-yazıları" class="col-md-12 text-center mt-3">
+                                    @if (!String.IsNullOrWhiteSpace(user.Bio))
+                                    {
+                                        <p>" <i>@user.Bio</i> "</p>
+                                    }
+                                    <p>@user.FirstName @user.LastName</p>
+                                    <p>@user.Email</p>
+                                    <p>@user.HitRate - Görüntülenme</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-4 text-center">
+                            <a class="btn btn-danger back-to-top" role="button"><strong>Başa Dön</strong></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-8">
+            @if (kisiMakaleleri.Count == 0)
+            {
+                <h2 class="text-light font-weight-bold">Ups... Görünen O Ki Bu Kişi Daha Hiç Makale Yayınlamamış..</h2>
+            }
+
+            else
+            {
+                @foreach (Article item in kisiMakaleleri)
+                {
+                    System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
+
+                    string icerik = rx.Replace(item.Content, "");
+
+                    icerik = icerik.Replace("&nbsp;", " ");
+
+                    string[] cumleler = icerik.Split('.');
+
+                    string content = string.Empty;
+
+                    for (int i = 0; i < 3; i++)
+                        content += cumleler[i] + ". ";
+
+                    <!--<div id="container">--> @*// Hareketli kart yapısı için sadece bu alanları açmak yeterli.*@
+                    <!--<div id="inner">-->
+                    <div class="makale-kart-yapısı">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div id="makale-alt-kart" class="col-md-12 justify-content-center pb-2">
+
+                                    @if (id == Model.Item5.Where(x => x.UserName == isim).Select(x => x.UserID).FirstOrDefault())
+                                    {
+                                        <div id="makale-edit-ve-silme" class="my-2 text-right">
+                                            <a asp-controller="Makale" asp-action="MakaleDüzenle" asp-route-makaleid="@item.ArticleID" class="mr-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="white" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                </svg>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#makaleyiSil">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="white" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                </svg>
+                                            </a>
+                                            <div class="modal fade" id="makaleyiSil" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body text-center font-weight-bold">
+                                                            Seçili Makaleyi Silmek İstiyor Musunuz?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-success font-weight-bold" data-dismiss="modal">Kapat</button>
+                                                            <a class="btn btn-danger font-weight-bold" asp-controller="Makale" asp-action="MakaleSil" asp-route-makaleid="@item.ArticleID">Makaleyi Sil</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="card mt-3">
+
+                                        <img id="makale-fotografı" src="/postedImage/@item.ArticleImage" class="card-img-top" alt="@item.Head" style="width:100%; border:4px solid white;">
+                                        <div class="card-body">
+                                            <h3 class="card-title">
+                                                <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@item.ArticleID" asp-route-makaleAdı="@item.Head.Trim().Replace(' ','?')" class="card-title text-dark anasayfa-makale-ismi">
+                                                    @item.Head
+                                                </a>
+
+                                                <p>
+                                                    <h5>@item.ReleaseDate.ToShortDateString() - @item.ReadTime Dakika</h5>
+                                                </p>
+                                            </h3>
+                                            <p>
+                                                @content
+                                            </p>
+                                            <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@item.ArticleID" asp-route-makaleAdı="@item.Head.Trim().Replace(' ','?')" class="btn btn-primary">Devamını Oku...</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*</div>
+                        </div>*@
+                }
+            }
+        </div>
+    </div>
+</div>

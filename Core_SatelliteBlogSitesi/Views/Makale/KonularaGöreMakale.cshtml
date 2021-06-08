@@ -1,0 +1,160 @@
+﻿@model Tuple<List<Article>, List<ArticleCategory>, List<Category>, List<UserCategory>, List<User>>
+
+
+@{
+    ViewData["Title"] = "Konulara Göre Makaleler";
+    ViewData["id"] = ViewBag.id;
+
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+
+    Category seciliKonu = Model.Item3.Where(x => x.CategoryID == Convert.ToInt32(ViewBag.konuID)).FirstOrDefault();
+
+    List<int> seciliKonuMakaleleri = Model.Item2.OrderByDescending(x => x.ArticleID).Where(x => x.CategoryID == seciliKonu.CategoryID).Select(x => x.ArticleID).ToList();
+}
+
+
+
+<section class="wrapper">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+</section>
+
+@{
+    if (seciliKonuMakaleleri.Count == 0)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 offset-1 mt-5">
+                    
+                    <div class="col-md-12">
+                        <h3 class="font-weight-bold text-light">
+                            Ups... Görünen O Ki Seçtiğin Konuda Henüz Kimse Makale Yazmamış.
+
+                            <br />
+
+                            İstersen İlk Makaleyi <a asp-controller="Makale" asp-action="YeniMakale" class="text-warning">Sen Yazarak</a> Bu Konuya Önderlik Edebilirsin :))
+
+                            <br />
+
+                            Ya Da Altta Bulunan Diğer Konulara Bir Göz Atabilirsin.
+                        </h3>
+                    </div>
+
+                    <div class="col-md-8 offset-2 mt-3">
+
+                        @foreach (Category item in Model.Item3)
+                        {
+                            <a asp-action="KonularaGöreMakale"
+                               asp-route-id="@item.CategoryID"
+                               class="btn btn-outline-success mx-1 my-1">
+
+                                @item.Name
+
+                            </a>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    else
+    {
+        <div class="container mt-5">
+            <div class="row">
+                    
+                <div class="col-md-8">
+
+                        @{
+                            foreach (int item in seciliKonuMakaleleri)
+                            {
+                                Article article = Model.Item1.Where(x => x.ArticleID == item).FirstOrDefault();
+                                User user = Model.Item5.Where(x => x.UserID == article.UserID).FirstOrDefault();
+
+                                System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
+
+                                string icerik = rx.Replace(article.Content, "");
+                                icerik = icerik.Replace("&nbsp;", " ");
+                                string[] cumleler = icerik.Split('.');
+                                string content = string.Empty;
+                                for (int i = 0; i < 3; i++)
+                                    content += cumleler[i] + ". ";
+
+                                //<div class="container"> // Hareketli kart yapısı için sadece bu alanları açmak yeterli.
+                                //<div class="inner">
+                            <div class="makale-kart-yapısı">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-2 mx-1 my-2">
+                                            <a asp-controller="user" asp-action="Profil" asp-route-kullanıcıadı="@user.UserName"><img id="avatar" src="/postedImage/@user.Avatar" alt="@user.FirstName resmi" /></a>
+                                        </div>
+                                        <div class="col-md-9 ml-2">
+                                            <p>
+                                                <a asp-controller="user" asp-action="Profil" asp-route-kullanıcıadı="@user.UserName" class="text-light"><h3>@user.FirstName @user.LastName</h3></a>
+                                            </p>
+                                            <p>
+                                                <h4 class="text-light">@article.ReleaseDate.ToString("MMM dd"), @article.ReleaseDate.Year - ~@article.ReadTime Dk.</h4>
+                                            </p>
+                                        </div>
+                                        <div id="makale-alt-kart" class="col-md-12 justify-content-center pb-2">
+                                            <div class="card">
+
+                                                <img id="makale-fotografı" src="/postedImage/@article.ArticleImage" class="card-img-top" alt="@article.Head Resmi" style="width:100%; border:4px solid white;">
+                                                <div class="card-body">
+                                                    <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@article.ArticleID" asp-route-makaleAdı="@article.Head.Trim().Replace(' ','?')" class="card-title text-dark anasayfa-makale-ismi">
+                                                        <h1 class="card-title">@article.Head</h1>
+                                                    </a>
+                                                    <p>
+                                                        @content
+                                                    </p>
+                                                    <a asp-controller="Makale" asp-action="MakaleAyrıntıSayfası" asp-route-id="@article.ArticleID" asp-route-makaleAdı="@article.Head.Trim().Replace(' ','?')" class="btn btn-primary">Devamını Oku...</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                    //</div>
+                                    //</div>
+                                }
+                            }
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="sticky-top" style="top:170px;">
+                            <div class="col-md-12">
+                                <h4 class="text-light">İlgilenebileceğiniz Diğer Konular</h4>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                @foreach (Category item in Model.Item3)
+                                {
+                                    <a asp-action="KonularaGöreMakale"
+                                       asp-route-id="@item.CategoryID"
+                                       class="btn btn-outline-success my-1 mx-1">
+
+                                        @item.Name
+
+                                    </a>
+                                }
+                            </div>
+
+                            <div class="col-md-12 mt-4 text-center">
+                                <a class="btn btn-danger back-to-top" role="button"><strong>Başa Dön</strong></a>
+                            </div>
+
+                        </div>
+                    </div>
+
+               
+            </div>
+        </div>
+
+    }
+}
+
